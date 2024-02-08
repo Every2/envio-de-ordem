@@ -68,6 +68,7 @@ public class Tests
         model.Delete(key, list);
         
         Assert.False(database.ContainsKey(key));
+        Assert.False(database.ContainsValue(list));
     }
 
     [Fact]
