@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using OMSSample.Models;
 using Xunit;
 namespace OMSSample.Tests.Unit_Tests;
 
@@ -40,5 +42,46 @@ public class Tests
         sample.orderSymbol = expectedSymbol;
         
         Assert.Equal(expectedSymbol, sample.orderSymbol);
+    }
+
+    [Fact]
+    public void AddToDb_Should_Add_Element()
+    {
+        var database = new Dictionary<string, List<int>>();
+        var model = new Model<int>(database);
+        var key = "key";
+        var list = new List<int> { 1, 2, 3 };
+        
+        model.AddToDb(key, list);
+        Assert.True(database.ContainsKey(key));
+        Assert.Equal(list, database[key]);
+    }
+
+    [Fact]
+    public void Delete_Should_Remove_Element_With_Two_Paramaters()
+    {
+        var key = "key";
+        var list = new List<int> { 1, 2, 3 };
+        var database = new Dictionary<string, List<int>> { { key, list } };
+        var model = new Model<int>(database);
+        
+        model.Delete(key, list);
+        
+        Assert.False(database.ContainsKey(key));
+    }
+
+    [Fact]
+    public void Delete_Should_Remove_Element_with_Only_Key()
+    {
+        var key = "key";
+        var list = new List<int> { 1, 2, 3 };
+        var database = new Dictionary<string, List<int>> { { key, list } };
+        var model = new Model<int>(database);
+
+        
+        model.Delete(key);
+
+        
+        Assert.False(database.ContainsKey(key));
     }
 }

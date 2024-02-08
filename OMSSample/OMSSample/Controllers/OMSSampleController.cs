@@ -6,7 +6,10 @@ namespace OMSSample.Controllers;
 [ApiController]
 public class OMSSampleController : ControllerBase
 {
-    
-    
+    [HttpPost]
+    public ActionResult<OMSSample> postRequest()
+    {
+        return Ok();
+    }
 }
 
