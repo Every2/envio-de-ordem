@@ -7,17 +7,17 @@ namespace OMSSample.Controllers;
 [ApiController]
 public class OMSSampleController : ControllerBase
 {
-    private Model model = new Model();
+    private Model _model = new Model();
     
     
     [HttpPost("sendNewOrder")]
-    public ActionResult<OMSSample> sendNewOrder(string symbol, uint amount, decimal price)
+    public ActionResult<OMSSample> SendNewOrder(string symbol, uint amount, decimal price)
     {
         var list = new List<OMSSample>
         {
             new OMSSample { orderAmount = amount, orderSymbol = symbol, price = price }
         };
-        model.AddToDb("ClOrdID", list);
+        _model.AddToDb("ClOrdID", list);
         
         return Ok(list);
     }

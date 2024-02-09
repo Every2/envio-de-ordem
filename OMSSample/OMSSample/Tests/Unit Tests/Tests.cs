@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OMSSample.Controllers;
 using OMSSample.Models;
 using Xunit;
 namespace OMSSample.Tests.Unit_Tests;
@@ -76,5 +77,15 @@ public class Tests
 
         model.Delete(key);
         Assert.False(model.ContainsKey(key));
+    }
+
+    [Fact]
+    public void Post_ReturnsStatusCode200()
+    {
+        var controller = new OMSSampleController();
+        var result = controller.SendNewOrder("teste", 1, 10.5m);
+        var actionResult = Assert.IsType<ActionResult<OMSSample>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        Assert.Equal(200, okResult.StatusCode);
     }
 }
