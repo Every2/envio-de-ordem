@@ -3,7 +3,6 @@ namespace OMSSample;
 public class OMSSample
 {
     private uint _orderAmount;
-
     public uint orderAmount
     {
         get { return _orderAmount; }

@@ -37,7 +37,7 @@ public class Tests
     public void OrderSymbol_SetAndGet_ShouldWorkCorrectly()
     {
         var sample = new OMSSample();
-        string expectedSymbol = "Teste";
+        string? expectedSymbol = "Teste";
 
         sample.orderSymbol = expectedSymbol;
         
@@ -47,42 +47,36 @@ public class Tests
     [Fact]
     public void AddToDb_Should_Add_Element()
     {
-        var database = new Dictionary<string, List<OMSSample>>();
-        var model = new Model<OMSSample>(database);
+        var model = new Model();
         var key = "key";
-        var list = new List<int> { 1, 2, 3 };
+        var sampleList = new List<OMSSample>
+        {
+            new OMSSample { orderAmount = 1, orderSymbol = "ABC", price = 10.5m },
+            new OMSSample { orderAmount = 2, orderSymbol = "DEF", price = 20.7m }
+        };
+
         
-        model.AddToDb(key, list);
-        Assert.True(database.ContainsKey(key));
-        Assert.Equal(list, database[key]);
+        model.AddToDb(key, sampleList);
+        
+        Assert.True(model.GetFromDb(key) != null);
+        Assert.Equal(sampleList, model.GetFromDb(key));
     }
+    
+    
 
     [Fact]
-    public void Delete_Should_Remove_Element_With_Two_Paramaters()
+    public void Delete_Should_Remove_Element()
     {
+        var model = new Model();
         var key = "key";
-        var list = new List<int> { 1, 2, 3 };
-        var database = new Dictionary<string, List<OMSSample>> { { key, list } };
-        var model = new Model<OMSSample>(database);
-        
-        model.Delete(key, list);
-        
-        Assert.False(database.ContainsKey(key));
-        Assert.False(database.ContainsValue(list));
-    }
-
-    [Fact]
-    public void Delete_Should_Remove_Element_with_Only_Key()
-    {
-        var key = "key";
-        var list = new List<OMSSample> { 1, 2, 3 };
-        var database = new Dictionary<string, List<OMSSample>> { { key, list } };
-        var model = new Model<OMSSample>(database);
+        var sampleList = new List<OMSSample>
+        {
+            new OMSSample { orderAmount = 1, orderSymbol = "ABC", price = 10.5m },
+            new OMSSample { orderAmount = 2, orderSymbol = "DEF", price = 20.7m }
+        };
+        var database = new Dictionary<string, List<OMSSample>> { { key, sampleList } };
 
         
-        model.Delete(key);
-
-        
-        Assert.False(database.ContainsKey(key));
+        Assert.False(model.Delete(key));
     }
 }

@@ -1,26 +1,34 @@
-namespace OMSSample.Models;
+using System.Collections.Generic;
 
-public class Model
+namespace OMSSample.Models
 {
-    private Dictionary<string, List<OMSSample>> _database;
-
-    public Model(Dictionary<string, List<OMSSample>> database)
+    public class Model
     {
-        this._database = database;
-    }
+        private Dictionary<string, List<OMSSample>> _database;
 
-    public void AddToDb(string clOrdId, List<OMSSample> list)
-    {
-        this._database.Add(clOrdId, list);
-    }
+        public Model()
+        {
+            _database = new Dictionary<string, List<OMSSample>>();
+        }
 
-    public void Delete(string key, List<OMSSample> value)
-    {
-        this._database.Remove(key, out value);
+        public void AddToDb(string clOrdId, List<OMSSample> list)
+        {
+            _database.Add(clOrdId, list);
+        }
+
+        public bool Delete(string key)
+        {
+            return _database.Remove(key);
+        }
+
+        public List<OMSSample>? GetFromDb(string clOrdId)
+        {
+            if (_database.TryGetValue(clOrdId, out List<OMSSample> value))
+            {
+                return value;
+            }
+            return null;
+        }
     }
     
-    public void Delete(string key)
-    {
-            this._database.Remove(key);
-    }
 }
