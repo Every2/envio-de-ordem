@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OMSSample.Models;
 
 namespace OMSSample.Controllers;
 
@@ -6,10 +7,13 @@ namespace OMSSample.Controllers;
 [ApiController]
 public class OMSSampleController : ControllerBase
 {
-    [HttpPost]
-    public ActionResult<OMSSample> postRequest()
+    private readonly Model<int> _order;
+    private OMSSample _sample = new OMSSample();
+    [HttpPost("v1/sendNewOrder")]
+    public ActionResult<OMSSample> sendNewOrder(string order, int value)
     {
-        return Ok();
+        _order.AddToDb(order, new List<int>(value));
+        return CreatedAtAction(new string("post"), new {  });
     }
 }
 

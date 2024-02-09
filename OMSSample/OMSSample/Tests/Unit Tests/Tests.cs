@@ -47,8 +47,8 @@ public class Tests
     [Fact]
     public void AddToDb_Should_Add_Element()
     {
-        var database = new Dictionary<string, List<int>>();
-        var model = new Model<int>(database);
+        var database = new Dictionary<string, List<OMSSample>>();
+        var model = new Model<OMSSample>(database);
         var key = "key";
         var list = new List<int> { 1, 2, 3 };
         
@@ -62,8 +62,8 @@ public class Tests
     {
         var key = "key";
         var list = new List<int> { 1, 2, 3 };
-        var database = new Dictionary<string, List<int>> { { key, list } };
-        var model = new Model<int>(database);
+        var database = new Dictionary<string, List<OMSSample>> { { key, list } };
+        var model = new Model<OMSSample>(database);
         
         model.Delete(key, list);
         
@@ -75,9 +75,9 @@ public class Tests
     public void Delete_Should_Remove_Element_with_Only_Key()
     {
         var key = "key";
-        var list = new List<int> { 1, 2, 3 };
-        var database = new Dictionary<string, List<int>> { { key, list } };
-        var model = new Model<int>(database);
+        var list = new List<OMSSample> { 1, 2, 3 };
+        var database = new Dictionary<string, List<OMSSample>> { { key, list } };
+        var model = new Model<OMSSample>(database);
 
         
         model.Delete(key);
