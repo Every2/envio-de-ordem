@@ -1,11 +1,11 @@
 namespace OMSSample;
 
-public class OMSSample
+public class OmsSample
 {
     private uint _orderAmount;
-    public uint orderAmount
+    public uint OrderAmount
     {
-        get { return _orderAmount; }
+        get => _orderAmount;
         set
         {
             if (value > 0)
@@ -19,6 +19,6 @@ public class OMSSample
         }
     }
 
-    public string orderSymbol { get; set; }
-    public decimal price { get; set; }
+    public string OrderSymbol { get; set; }
+    public decimal Price { get; set; }
 }

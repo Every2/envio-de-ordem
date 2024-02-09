@@ -4,14 +4,14 @@ namespace OMSSample.Models
 {
     public class Model
     {
-        private Dictionary<string, List<OMSSample>> _database;
+        private Dictionary<string, List<OmsSample>> _database;
 
         public Model()
         {
-            _database = new Dictionary<string, List<OMSSample>>();
+            _database = new Dictionary<string, List<OmsSample>>();
         }
 
-        public void AddToDb(string key, List<OMSSample> list)
+        public void AddToDb(string key, List<OmsSample> list)
         {
             _database.Add(key, list);
         }
@@ -25,9 +25,9 @@ namespace OMSSample.Models
             return _database.Remove(key);
         }
 
-        public List<OMSSample>? GetFromDb(string key)
+        public List<OmsSample>? GetFromDb(string key)
         {
-            return _database.TryGetValue(key, out List<OMSSample> value) ? value : null;
+            return _database.TryGetValue(key, out List<OmsSample> value) ? value : null;
         }
     }
     
