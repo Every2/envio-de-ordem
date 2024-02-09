@@ -11,23 +11,23 @@ namespace OMSSample.Models
             _database = new Dictionary<string, List<OMSSample>>();
         }
 
-        public void AddToDb(string clOrdId, List<OMSSample> list)
+        public void AddToDb(string key, List<OMSSample> list)
         {
-            _database.Add(clOrdId, list);
+            _database.Add(key, list);
         }
 
+        public bool ContainsKey(string key)
+        {
+            return _database.ContainsKey(key);
+        }
         public bool Delete(string key)
         {
             return _database.Remove(key);
         }
 
-        public List<OMSSample>? GetFromDb(string clOrdId)
+        public List<OMSSample>? GetFromDb(string key)
         {
-            if (_database.TryGetValue(clOrdId, out List<OMSSample> value))
-            {
-                return value;
-            }
-            return null;
+            return _database.TryGetValue(key, out List<OMSSample> value) ? value : null;
         }
     }
     

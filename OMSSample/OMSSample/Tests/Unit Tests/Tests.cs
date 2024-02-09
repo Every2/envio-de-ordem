@@ -62,8 +62,6 @@ public class Tests
         Assert.Equal(sampleList, model.GetFromDb(key));
     }
     
-    
-
     [Fact]
     public void Delete_Should_Remove_Element()
     {
@@ -76,7 +74,7 @@ public class Tests
         };
         var database = new Dictionary<string, List<OMSSample>> { { key, sampleList } };
 
-        
-        Assert.False(model.Delete(key));
+        model.Delete(key);
+        Assert.False(model.ContainsKey(key));
     }
 }
