@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using OMSSample.Controllers;
 using OMSSample.Models;
 using Xunit;
+
 namespace OMSSample.Tests.Unit_Tests;
 
 public class Tests
@@ -11,7 +12,7 @@ public class Tests
     {
         var sample = new OmsSample();
         sample.OrderAmount = 10;
-        
+
         Assert.Equal(10u, sample.OrderAmount);
     }
 
@@ -30,7 +31,7 @@ public class Tests
         decimal expectedPrice = 10.5m;
 
         sample.Price = expectedPrice;
-        
+
         Assert.Equal(expectedPrice, sample.Price);
     }
 
@@ -41,7 +42,7 @@ public class Tests
         string? expectedSymbol = "Teste";
 
         sample.OrderSymbol = expectedSymbol;
-        
+
         Assert.Equal(expectedSymbol, sample.OrderSymbol);
     }
 
@@ -56,13 +57,13 @@ public class Tests
             new OmsSample { OrderAmount = 2, OrderSymbol = "DEF", Price = 20.7m }
         };
 
-        
+
         model.AddToDb(key, sampleList);
-        
+
         Assert.True(model.GetFromDb(key) != null);
         Assert.Equal(sampleList, model.GetFromDb(key));
     }
-    
+
     [Fact]
     public void Delete_Should_Remove_Element()
     {
