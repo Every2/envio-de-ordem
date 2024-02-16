@@ -5,6 +5,7 @@ namespace OMSSample.Models
     public class Model
     {
         private Dictionary<string, List<OmsSample>> _database;
+        private List<OmsSample> _value;
 
         public Model()
         {
@@ -29,6 +30,8 @@ namespace OMSSample.Models
         {
             return _database.TryGetValue(key, out List<OmsSample> value) ? value : null;
         }
+
+        
     }
     
 }
