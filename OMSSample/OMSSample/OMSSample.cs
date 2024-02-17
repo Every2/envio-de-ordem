@@ -32,7 +32,7 @@ public class OmsSample
             }
             else
             {
-                throw new NullReferenceException("The String can't be null");
+                throw new ArgumentNullException($"Can't be null {nameof(value)}");
             }
         }
          }

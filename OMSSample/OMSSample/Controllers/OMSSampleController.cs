@@ -12,8 +12,6 @@ namespace OMSSample.Controllers
     [Route("v1/")]
     public class OmsSampleController : ControllerBase
     {
-        private readonly HashSet<SessionID> _sessionId;
-
         public OmsSampleController()
         {
             var settings =
@@ -25,7 +23,7 @@ namespace OMSSample.Controllers
             var initiator = new SocketInitiator(new ConnectionHandler(), storeFactory, settings, logFactory,
                 messageFactory);
             initiator.Start();
-            _sessionId = initiator.GetSessionIDs();
+            initiator.GetSessionIDs();
         }
 
         [HttpPost]
@@ -38,27 +36,27 @@ namespace OMSSample.Controllers
                     new ClOrdID(Guid.NewGuid().ToString()),
                     new Symbol(fields.OrderSymbol),
                     new Side(Side.BUY),
-                    new TransactTime(DateTime.Now),
+                    new TransactTime(DateTime.UtcNow),
                     new OrdType(OrdType.MARKET)
                 );
 
                 newOrderSingle.Set(new Price(fields.Price));
                 newOrderSingle.Set(new OrderQty(fields.OrderAmount));
+                newOrderSingle.Set(new NoPartyIDs(0));
                 var sessionid = new SessionID("FIX.4.4", "CLIENT1", "EXECUTOR");
                 Session.SendToTarget(newOrderSingle, sessionid);
 
                 return Ok(new { success = true, description = "Order placed successfully" });
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return StatusCode(500, new { success = false, description = ex.Message });
+                return StatusCode(500, new { success = false, description = e.Message });
             }
         }
 
         private class ConnectionHandler : MessageCracker, IApplication
         {
             private Model _model = new Model();
-            private Session? _session;
 
             public void FromAdmin(Message message, SessionID sessionId)
             {
@@ -109,7 +107,7 @@ namespace OMSSample.Controllers
 
             public void OnCreate(SessionID sessionId)
             {
-                _session = Session.LookupSession(sessionId);
+                Session.LookupSession(sessionId);
             }
 
             public void OnLogout(SessionID sessionId)
@@ -129,7 +127,7 @@ namespace OMSSample.Controllers
                     var clOrdId = message.IsSetClOrdID() ? message.ClOrdID.getValue() : string.Empty;
                     if (!_model.ContainsKey(clOrdId))
                     {
-                        _model.AddToDb(clOrdId, new List<OmsSample>()); 
+                        _model.AddToDb(clOrdId, new List<OmsSample>());
                     }
 
                     _model.AddToDb(clOrdId, new List<OmsSample>()
@@ -142,9 +140,9 @@ namespace OMSSample.Controllers
                         }
                     });
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    Console.WriteLine($"Error processing execution report: {ex.Message}");
+                    Console.WriteLine($"Error processing execution report: {e.Message}");
                 }
             }
         }

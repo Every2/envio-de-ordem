@@ -1,37 +1,53 @@
-using System.Collections.Generic;
-
 namespace OMSSample.Models
 {
     public class Model
     {
-        private Dictionary<string, List<OmsSample>> _database;
-        private List<OmsSample> _value;
+        private readonly Dictionary<string, List<OmsSample>?> _database = new();
 
-        public Model()
+        public void AddToDb(string? key, List<OmsSample>? list)
         {
-            _database = new Dictionary<string, List<OmsSample>>();
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (_database.ContainsKey(key))
+            {
+                throw new ArgumentException($"Key already exist {nameof(key)}");
+            }
+
+            _database[key] = list ?? throw new ArgumentNullException(nameof(list));
+
         }
 
-        public void AddToDb(string key, List<OmsSample> list)
+        public bool ContainsKey(string? key)
         {
-            _database.Add(key, list);
-        }
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
 
-        public bool ContainsKey(string key)
-        {
             return _database.ContainsKey(key);
         }
-        public bool Delete(string key)
+
+        public bool Delete(string? key)
         {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             return _database.Remove(key);
         }
 
-        public List<OmsSample>? GetFromDb(string key)
+        public List<OmsSample>? GetFromDb(string? key)
         {
-            return _database.TryGetValue(key, out List<OmsSample> value) ? value : null;
-        }
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
 
-        
+            return _database.TryGetValue(key, out List<OmsSample>? value) ? value : new List<OmsSample>();
+        }
     }
-    
 }
