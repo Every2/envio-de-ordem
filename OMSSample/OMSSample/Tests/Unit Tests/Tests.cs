@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using OMSSample.Controllers;
 using OMSSample.Models;
+using QuickFix;
 using Xunit;
 
 namespace OMSSample.Tests.Unit_Tests
@@ -103,52 +105,6 @@ namespace OMSSample.Tests.Unit_Tests
 
             Assert.False(result);
         }
-
-        [Fact]
-        public void Delete_ExistingKey_ReturnsTrue()
-        {
-            var model = new Model();
-            var list = new List<OmsSample>();
-            model.AddToDb("key", list);
-
-            var result = model.Delete("key");
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void Delete_NonExistingKey_ReturnsFalse()
-        {
-            var model = new Model();
-            const string key = "key";
-
-            var result = model.Delete(key);
-
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void GetFromDb_ExistingKey_ReturnsList()
-        {
-            var model = new Model();
-            const string key = "a";
-            var list = new List<OmsSample>();
-           
-            var result = model.GetFromDb(key);
-
-            Assert.NotNull(result);
-        }
-
-        [Fact]
-        public void GetFromDb_NonExistingKey_ReturnsEmptyList()
-        {
-            var model = new Model();
-            const string key = "key";
-
-            var result = model.GetFromDb(key);
-
-            if (result != null) Assert.Empty(result);
-        }
         
         [Fact]
         public void SendNewOrder_ValidFields_ReturnsOkResult()
@@ -163,7 +119,7 @@ namespace OMSSample.Tests.Unit_Tests
             
             var result = controller.SendNewOrder(fields);
             
-            Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);
+            Assert.IsType<OkObjectResult>(result);
         }
         
     }

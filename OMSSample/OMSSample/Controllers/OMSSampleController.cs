@@ -10,8 +10,10 @@ namespace OMSSample.Controllers
 {
     [ApiController]
     [Route("v1/")]
-    public class OmsSampleController : ControllerBase
+    public class OmsSampleController : ControllerBase, IDisposable
     {
+        private readonly SocketInitiator _initiator;
+        Model _model = new Model();
         public OmsSampleController()
         {
             var settings =
@@ -20,10 +22,11 @@ namespace OMSSample.Controllers
             var storeFactory = new FileStoreFactory(settings);
             var logFactory = new FileLogFactory(settings);
             var messageFactory = new DefaultMessageFactory();
-            var initiator = new SocketInitiator(new ConnectionHandler(), storeFactory, settings, logFactory,
+            _initiator = new SocketInitiator(new ConnectionHandler(), storeFactory, settings, logFactory,
                 messageFactory);
-            initiator.Start();
-            initiator.GetSessionIDs();
+            _initiator.Start();
+            _initiator.GetSessionIDs();
+            
         }
 
         [HttpPost]
@@ -39,13 +42,21 @@ namespace OMSSample.Controllers
                     new TransactTime(DateTime.UtcNow),
                     new OrdType(OrdType.MARKET)
                 );
-
+        
                 newOrderSingle.Set(new Price(fields.Price));
                 newOrderSingle.Set(new OrderQty(fields.OrderAmount));
                 newOrderSingle.Set(new NoPartyIDs(0));
                 var sessionid = new SessionID("FIX.4.4", "CLIENT1", "EXECUTOR");
                 Session.SendToTarget(newOrderSingle, sessionid);
-
+                var list = new List<OmsSample>
+                {
+                    new()
+                    {
+                        OrderAmount = (uint)newOrderSingle.OrderQty.getValue(),
+                        OrderSymbol = newOrderSingle.Symbol.getValue(), Price = newOrderSingle.Price.getValue()
+                    }
+                };
+                _model.AddToDb(newOrderSingle.ClOrdID.getValue(), list);
                 return Ok(new { success = true, description = "Order placed successfully" });
             }
             catch (Exception e)
@@ -53,19 +64,19 @@ namespace OMSSample.Controllers
                 return StatusCode(500, new { success = false, description = e.Message });
             }
         }
-
+        
         private class ConnectionHandler : MessageCracker, IApplication
         {
-            private Model _model = new Model();
-
+            
             public void FromAdmin(Message message, SessionID sessionId)
             {
+                Crack(message, sessionId);
             }
 
             public void ToAdmin(Message message, SessionID sessionId)
             {
             }
-
+            
             public void FromApp(Message message, SessionID sessionId)
             {
                 Console.WriteLine($"In: {message}");
@@ -81,6 +92,16 @@ namespace OMSSample.Controllers
                 }
             }
 
+            private static void SendLogonMessage(SessionID sessionId)
+            {
+                var logon = new Logon(
+                    new EncryptMethod(0),
+                    new HeartBtInt(30)
+                );
+
+                Session.SendToTarget(logon, sessionId);
+            }
+            
             public void ToApp(Message message, SessionID sessionId)
             {
                 try
@@ -100,13 +121,14 @@ namespace OMSSample.Controllers
                 catch (FieldNotFoundException)
                 {
                 }
-
+                
                 Console.WriteLine();
                 Console.WriteLine($"OUT: {message}");
             }
 
             public void OnCreate(SessionID sessionId)
             {
+                SendLogonMessage(sessionId);
                 Session.LookupSession(sessionId);
             }
 
@@ -114,37 +136,19 @@ namespace OMSSample.Controllers
             {
                 Console.WriteLine($"Logout - {sessionId}");
             }
-
+            
             public void OnLogon(SessionID sessionId)
             {
                 Console.WriteLine($"Logon - {sessionId}");
             }
 
-            public void OnMessage(ExecutionReport message, SessionID sessionId)
-            {
-                try
-                {
-                    var clOrdId = message.IsSetClOrdID() ? message.ClOrdID.getValue() : string.Empty;
-                    if (!_model.ContainsKey(clOrdId))
-                    {
-                        _model.AddToDb(clOrdId, new List<OmsSample>());
-                    }
+            
+        }
 
-                    _model.AddToDb(clOrdId, new List<OmsSample>()
-                    {
-                        new()
-                        {
-                            OrderSymbol = message.IsSetSymbol() ? message.Symbol.getValue() : string.Empty,
-                            OrderAmount = (uint)(message.IsSetOrderQty() ? message.OrderQty.getValue() : 0),
-                            Price = message.IsSetPrice() ? message.Price.getValue() : 0
-                        }
-                    });
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Error processing execution report: {e.Message}");
-                }
-            }
+        public void Dispose()
+        {
+            _initiator.Stop();
+            _initiator.Dispose();
         }
     }
 }

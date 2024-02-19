@@ -17,6 +17,24 @@
 
     <ItemGroup>
       <Compile Remove="app.cs" />
+      <Compile Remove="store\**" />
+      <Compile Remove="log\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="store\**" />
+      <EmbeddedResource Remove="log\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="store\**" />
+      <Content Remove="log\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="store\**" />
+      <None Remove="log\**" />
+      <None Remove="DisposedSessionEvents.log" />
     </ItemGroup>
 
 </Project>
