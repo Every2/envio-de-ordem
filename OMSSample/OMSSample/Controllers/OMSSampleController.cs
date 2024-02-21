@@ -13,7 +13,6 @@ namespace OMSSample.Controllers
     public class OmsSampleController : ControllerBase, IDisposable
     {
         private readonly SocketInitiator _initiator;
-        Model _model = new Model();
         public OmsSampleController()
         {
             var settings =
@@ -56,7 +55,6 @@ namespace OMSSample.Controllers
                         OrderSymbol = newOrderSingle.Symbol.getValue(), Price = newOrderSingle.Price.getValue()
                     }
                 };
-                _model.AddToDb(newOrderSingle.ClOrdID.getValue(), list);
                 return Ok(new { success = true, description = "Order placed successfully" });
             }
             catch (Exception e)

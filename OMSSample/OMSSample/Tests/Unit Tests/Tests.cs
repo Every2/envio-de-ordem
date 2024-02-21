@@ -46,65 +46,6 @@ namespace OMSSample.Tests.Unit_Tests
 
             Assert.Throws<ArgumentNullException>(() => omsSample.OrderSymbol = null);
         }
-
-        [Fact]
-        public void AddToDb_ValidKeyAndList_Success()
-        {
-            var model = new Model();
-            const string? key = "key";
-            var list = new List<OmsSample>();
-
-            model.AddToDb(key, list);
-
-            Assert.True(model.ContainsKey(key));
-        }
-
-        [Fact]
-        public void AddToDb_NullKey_ThrowsArgumentNullException()
-        {
-            var model = new Model();
-            string? key = null;
-            var list = new List<OmsSample>();
-
-            Assert.Throws<ArgumentNullException>(() => model.AddToDb(key, list));
-        }
-
-        [Fact]
-        public void AddToDb_DuplicateKey_ThrowsArgumentException()
-        {
-            var model = new Model();
-            const string key = "a";
-            var list1 = new List<OmsSample>();
-            var list2 = new List<OmsSample>();
-
-            model.AddToDb(key, list1);
-
-            Assert.Throws<ArgumentException>(() => model.AddToDb(key, list2));
-        }
-
-        [Fact]
-        public void ContainsKey_ExistingKey_ReturnsTrue()
-        {
-            var model = new Model();
-            var key = "key";
-            var list = new List<OmsSample>();
-            model.AddToDb(key, list);
-
-            var result = model.ContainsKey(key);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void ContainsKey_NonExistingKey_ReturnsFalse()
-        {
-            var model = new Model();
-            const string key = "key";
-
-            var result = model.ContainsKey(key);
-
-            Assert.False(result);
-        }
         
         [Fact]
         public void SendNewOrder_ValidFields_ReturnsOkResult()
