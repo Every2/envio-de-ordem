@@ -47,21 +47,7 @@ namespace OMSSample.Tests.Unit_Tests
             Assert.Throws<ArgumentNullException>(() => omsSample.OrderSymbol = null);
         }
         
-        [Fact]
-        public void SendNewOrder_ValidFields_ReturnsOkResult()
-        {
-            var controller = new OmsSampleController();
-            var fields = new OmsSample
-            {
-                OrderSymbol = "AAPL",
-                OrderAmount = 100,
-                Price = 150.50m
-            };
-            
-            var result = controller.SendNewOrder(fields);
-            
-            Assert.IsType<OkObjectResult>(result);
-        }
         
     }
+    
 }

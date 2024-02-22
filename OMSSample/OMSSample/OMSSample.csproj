@@ -8,6 +8,11 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.26" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.22" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.22">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
         <PackageReference Include="QuickFIXn.Core" Version="1.11.2" />
@@ -21,6 +26,7 @@
       <Compile Remove="store\**" />
       <Compile Remove="log\**" />
       <Compile Remove="Models\Model.cs" />
+      <Compile Remove="Models\User.cs" />
     </ItemGroup>
 
     <ItemGroup>
