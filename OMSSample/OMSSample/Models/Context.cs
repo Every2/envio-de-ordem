@@ -9,13 +9,4 @@ public class Context : DbContext
     }
 
     public DbSet<OrderSingle> OrderSingles{ get; set;}
-    public DbSet<User>  Users { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<OrderSingle>()
-            .HasOne(os => os.User)
-            .WithMany(u => u.NewOrderSingle)
-            .HasForeignKey(os => os.UserId);
-    }
 }

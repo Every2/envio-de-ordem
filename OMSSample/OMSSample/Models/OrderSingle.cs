@@ -7,23 +7,16 @@ namespace OMSSample.Models;
 [Table("NewOrderSingle")]
 public class OrderSingle
 {
-    [Column("id")]
-    [Display(Name = "id")]
-    public int Id { get; set; }
-    
-    [Column("userId")]
-    [Display(Name = "UserId")]
-    public int UserId { get; set; }
-
-    [ForeignKey("UserId")]
-    public User User { get; set; }
     
     [Column("ClOrdId")]
     [Display(Name = "ClOrdId")]
+    [MaxLength(500)]
+    [Key]
     public string ClOrdId { get; set; }
     
     [Column("Symbol")]
     [Display(Name = "Symbol")]
+    [MaxLength(255)]
     public string Symbol { get; set; }
     
     [Column("Price")]
