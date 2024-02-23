@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  base:
+    image: mcr.microsoft.com/dotnet/aspnet:6.0
+    working_dir: /app
+    ports:
+      - "5001:80"
+    volumes:
+      - .:/app
+
+  build:
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: dotnet build "./OMSSample.csproj" -c Release -o /app/build
+
+  publish:
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: dotnet publish "./OMSSample.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+  final:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - publish
+    command: dotnet OMSSample.dll
+
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: teste
+    ports:
+      - "5432:5432"
