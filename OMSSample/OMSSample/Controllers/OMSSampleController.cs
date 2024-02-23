@@ -94,6 +94,7 @@ public class OmsSampleController : ControllerBase, IDisposable
                 Console.WriteLine(e.StackTrace);
             }
         }
+        
         private static void SendLogonMessage(SessionID sessionId)
         {
             

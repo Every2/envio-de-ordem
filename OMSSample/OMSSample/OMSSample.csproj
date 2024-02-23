@@ -4,10 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
-        <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
-        <UserSecretsId>68da8d98-0e49-4719-bb2a-7fdd674af342</UserSecretsId>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,7 +15,6 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
         <PackageReference Include="Moq" Version="4.20.70" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
         <PackageReference Include="QuickFIXn.Core" Version="1.11.2" />
@@ -51,13 +46,6 @@
       <None Remove="store\**" />
       <None Remove="log\**" />
       <None Remove="DisposedSessionEvents.log" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ContainerEnvironmentVariable Include="ASPNETCORE_HTTPS_PORTS">
-        <Value>443</Value>
-      </ContainerEnvironmentVariable>
-      <ContainerPort Include="443" />
     </ItemGroup>
 
 </Project>
