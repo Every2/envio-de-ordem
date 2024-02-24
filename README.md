@@ -52,3 +52,13 @@ O OmsSample envia uma NewOrderSingle automaticamente, você só precisa preenche
 Caso tenha problema com o arquivo .cfg, vá no diretório `Controllers` e abra o arquivo `.cs` na linha 21 e edite o `"quickfix.cfg` pelo caminho absoluto. 
 
 Então após isso, você pode dar um `dotnet run` no seu projeto e tudo funcionar normalmente.
+
+
+# Como rodar o docker?
+
+Apenas vá na pasta onde se encontra o docker compose e rode:
+```docker
+docker-compose up
+```
+
+Ele irá rodar o codigo automaticamente e criar um banco de dados postgresql via docker.
